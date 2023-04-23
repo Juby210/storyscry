@@ -3,3 +3,5 @@ pandas
 streamlit
 ai21
 python-dotenv
+asyncio
+httpx-oauth

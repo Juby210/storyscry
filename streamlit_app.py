@@ -4,6 +4,8 @@ import ai21
 import streamlit as st
 from dotenv import load_dotenv
 
+from login import login
+
 load_dotenv()
 
 API_KEY = os.getenv("AI21_LABS_API_KEY")
@@ -42,6 +44,11 @@ def guess_sport(inp):
 
 
 st.title("The Sports Guesser")
+
+login()
+
+if "user_email" in st.session_state:
+    st.write(f"Hello {st.session_state.user_email}")
 
 st.write(
     "This is a simple **Streamlit** app that generates Sport Name based on given description"
