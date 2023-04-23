@@ -35,17 +35,17 @@ def login_button():
 
 def logout_button():
     if st.button("Logout"):
-        asyncio.run(revoke_token(st.session_state.client, st.session_state.token["access_token"]))
+        asyncio.run(revoke_token(st.session_state.client, st.session_state.cookies["token"]))
         del st.session_state["user_email"]
         del st.session_state["user_id"]
-        del st.session_state["token"]
+        del st.session_state.cookies["token"]
         st.experimental_rerun()
 
 
 def login():
     st.session_state.client = GoogleOAuth2(os.getenv("GOOGLE_CLIENT_ID"), os.getenv("GOOGLE_CLIENT_SECRET"))
 
-    if "token" not in st.session_state:
+    if "token" not in st.session_state.cookies:
         try:
             code = st.experimental_get_query_params()["code"]
         except (BaseException,):
@@ -59,12 +59,18 @@ def login():
                 if token.is_expired():
                     login_button()
                 else:
-                    st.session_state.token = token
+                    st.session_state.cookies["token"] = token["access_token"]
+                    st.session_state.cookies.save()
                     st.session_state.user_id, st.session_state.user_email = asyncio.run(
                         get_user_info(st.session_state.client, token["access_token"])
                     )
                     logout_button()
-                    return st.session_state.user_id, st.session_state.user_email
     else:
-        logout_button()
-        return st.session_state.user_id, st.session_state.user_email
+        token = st.session_state.cookies["token"]
+        try:
+            st.session_state.user_id, st.session_state.user_email = asyncio.run(
+                get_user_info(st.session_state.client, token)
+            )
+            logout_button()
+        except (BaseException,):
+            login_button()

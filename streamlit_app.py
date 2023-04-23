@@ -3,10 +3,15 @@ import os
 import ai21
 import streamlit as st
 from dotenv import load_dotenv
+from streamlit_cookies_manager import CookieManager
 
 from login import login
 
 load_dotenv()
+
+st.session_state.cookies = CookieManager(prefix="ai21hackathon/")
+if not st.session_state.cookies.ready():
+    st.stop()
 
 API_KEY = os.getenv("AI21_LABS_API_KEY")
 

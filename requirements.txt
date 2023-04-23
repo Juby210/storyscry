@@ -5,4 +5,4 @@ ai21
 python-dotenv
 asyncio
 httpx-oauth
-streamlit-javascript
+streamlit-cookies-manager
