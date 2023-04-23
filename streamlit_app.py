@@ -1,39 +1,53 @@
-from collections import namedtuple
-import altair as alt
-import math
-import pandas as pd
+import os
+
+import ai21
 import streamlit as st
+from dotenv import load_dotenv
 
-"""
-# Welcome to Streamlit!
+load_dotenv()
 
-Edit `/streamlit_app.py` to customize this app to your heart's desire :heart:
+API_KEY = os.getenv("AI21_LABS_API_KEY")
 
-If you have any questions, checkout our [documentation](https://docs.streamlit.io) and [community
-forums](https://discuss.streamlit.io).
+ai21.api_key = API_KEY
 
-In the meantime, below is an example of what you can do with just a few lines of code:
-"""
+# Prompt for the model
+PROMPT = "Based on the description given, name the sport.\nDescription: {description}\n Sport name: "
+
+# Initialization of the output variable
+if "output" not in st.session_state:
+    st.session_state["output"] = "Output:"
 
 
-with st.echo(code_location='below'):
-    total_points = st.slider("Number of points in spiral", 1, 5000, 2000)
-    num_turns = st.slider("Number of turns in spiral", 1, 100, 9)
+def guess_sport(inp):
+    if not len(inp):
+        return None
 
-    Point = namedtuple('Point', 'x y')
-    data = []
+    # overwrite the prompt with the description
+    prompt = PROMPT.format(description=inp)
 
-    points_per_turn = total_points / num_turns
+    response = ai21.Completion.execute(
+        model="j2-grande-instruct",
+        prompt=prompt,
+        temperature=0.5,
+        minTokens=1,
+        maxTokens=15,
+        numResults=1,
+    )
 
-    for curr_point_num in range(total_points):
-        curr_turn, i = divmod(curr_point_num, points_per_turn)
-        angle = (curr_turn + 1) * 2 * math.pi * i / points_per_turn
-        radius = curr_point_num / total_points
-        x = radius * math.cos(angle)
-        y = radius * math.sin(angle)
-        data.append(Point(x, y))
+    # return the name of the sport
+    st.session_state["output"] = response.completions[0].data.text
 
-    st.altair_chart(alt.Chart(pd.DataFrame(data), height=500, width=500)
-        .mark_circle(color='#0068c9', opacity=0.5)
-        .encode(x='x:Q', y='y:Q'))
-        
+    # a short celebration 😉
+    st.balloons()
+
+
+st.title("The Sports Guesser")
+
+st.write(
+    "This is a simple **Streamlit** app that generates Sport Name based on given description"
+)
+
+inp = st.text_area("Enter your description here", height=100)
+
+st.button("Guess", on_click=guess_sport(inp))
+st.write(f"Answer: {st.session_state.output}")
