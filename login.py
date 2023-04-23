@@ -3,6 +3,7 @@ import os
 import asyncio
 import streamlit as st
 from httpx_oauth.clients.google import GoogleOAuth2
+from streamlit_javascript import st_javascript
 
 redirect_url = os.getenv("GOOGLE_REDIRECT")
 
@@ -33,7 +34,7 @@ async def revoke_token(client, token):
 def login_button():
     if st.button("Continue with Google"):
         auth_url = asyncio.run(write_authorization_url(st.session_state.client))
-        st.write(f'<meta http-equiv="refresh" content="0; url=\'{auth_url}\'">', unsafe_allow_html=True)
+        st_javascript(f'window.location.href = "{auth_url}"')
 
 
 def logout_button():
