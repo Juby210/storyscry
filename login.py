@@ -1,5 +1,4 @@
 import os
-import webbrowser
 
 import asyncio
 import streamlit as st
@@ -34,7 +33,7 @@ async def revoke_token(client, token):
 def login_button():
     if st.button("Continue with Google"):
         auth_url = asyncio.run(write_authorization_url(st.session_state.client))
-        webbrowser.open(auth_url)
+        st.write(f'<meta http-equiv="refresh" content="0; url=\'{auth_url}\'">', unsafe_allow_html=True)
 
 
 def logout_button():
