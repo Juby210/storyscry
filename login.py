@@ -34,7 +34,7 @@ async def revoke_token(client, token):
 def login_button():
     if st.button("Continue with Google"):
         auth_url = asyncio.run(write_authorization_url(st.session_state.client))
-        st_javascript(f'window.location.href = "{auth_url}"')
+        st_javascript(f'window.open("{auth_url}").then(window.close)')
 
 
 def logout_button():
