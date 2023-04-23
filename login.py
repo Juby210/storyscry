@@ -3,14 +3,11 @@ import os
 import asyncio
 import streamlit as st
 from httpx_oauth.clients.google import GoogleOAuth2
-from streamlit_javascript import st_javascript
-
-redirect_url = os.getenv("GOOGLE_REDIRECT")
 
 
 async def write_authorization_url(client):
     authorization_url = await client.get_authorization_url(
-        redirect_url,
+        os.getenv("GOOGLE_REDIRECT"),
         scope=["profile", "email"],
         extras_params={"access_type": "offline"},
     )
@@ -18,7 +15,7 @@ async def write_authorization_url(client):
 
 
 async def write_access_token(client, code):
-    token = await client.get_access_token(code, redirect_url)
+    token = await client.get_access_token(code, os.getenv("GOOGLE_REDIRECT"))
     return token
 
 
@@ -32,9 +29,8 @@ async def revoke_token(client, token):
 
 
 def login_button():
-    if st.button("Continue with Google"):
-        auth_url = asyncio.run(write_authorization_url(st.session_state.client))
-        st_javascript(f'window.open("{auth_url}").then(window.close)')
+    auth_url = asyncio.run(write_authorization_url(st.session_state.client))
+    st.markdown(f'[Continue with Google]({auth_url})')
 
 
 def logout_button():
