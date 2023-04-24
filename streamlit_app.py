@@ -8,7 +8,7 @@ from streamlit_cookies_manager import CookieManager
 from login import login
 from prompts import prompts
 
-st.set_page_config(page_title="Story/scry AI", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="Story/scry AI")
 
 load_dotenv()
 
