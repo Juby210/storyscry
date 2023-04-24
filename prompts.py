@@ -1,5 +1,7 @@
 import streamlit as st
 
+from acts import Structure
+
 
 def prompts():
     if "select" in st.session_state:
@@ -35,15 +37,23 @@ def select_structure():
     col1, col2, col3 = c.columns(3)
     with col1:
         st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Square_1.svg/1200px-Square_1.svg.png")
-        st.button("Three-act structure", use_container_width=True)
+        if st.button("Three-act structure", use_container_width=True):
+            goto_acts(Structure.ThreeAct)
     with col2:
         st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Square_1.svg/1200px-Square_1.svg.png")
-        st.button("Hero's Journey", use_container_width=True)
+        if st.button("Hero's Journey", use_container_width=True):
+            goto_acts(Structure.HeroJourney)
     with col3:
         st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Square_1.svg/1200px-Square_1.svg.png")
-        st.button("Save the cat", use_container_width=True)
+        if st.button("Save the cat", use_container_width=True):
+            goto_acts(Structure.SaveTheCat)
     c.markdown("###")
     if c.button("Go back"):
         empty.empty()
         del st.session_state["select"]
         prompts()
+
+
+def goto_acts(selected):
+    st.session_state.structure = selected
+    st.experimental_rerun()

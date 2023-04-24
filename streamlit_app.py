@@ -5,10 +5,11 @@ import streamlit as st
 from dotenv import load_dotenv
 from streamlit_cookies_manager import CookieManager
 
+from acts import acts
 from login import login
 from prompts import prompts
 
-st.set_page_config(page_title="Story/scry AI")
+st.set_page_config(page_title="Story/scry AI", layout="wide")
 
 load_dotenv()
 
@@ -25,4 +26,7 @@ st.title("Story/scry AI")
 login()
 
 if "user_email" in st.session_state:
-    prompts()
+    if "structure" in st.session_state:
+        acts()
+    else:
+        prompts()
