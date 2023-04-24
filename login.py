@@ -50,6 +50,7 @@ def login_button():
 
 
 def logout_button():
+    st.sidebar.write(f"Hello {st.session_state.user_email}")
     if st.sidebar.button("Logout"):
         asyncio.run(revoke_token(st.session_state.client, st.session_state.cookies["token"]))
         del st.session_state["user_email"]
@@ -60,6 +61,10 @@ def logout_button():
 
 
 def login():
+    if "user_id" in st.session_state:
+        logout_button()
+        return
+
     st.session_state.client = GoogleOAuth2(os.getenv("GOOGLE_CLIENT_ID"), os.getenv("GOOGLE_CLIENT_SECRET"))
 
     if "token" not in st.session_state.cookies or st.session_state.cookies["token"] == "":
@@ -81,12 +86,14 @@ def login():
                     st.session_state.user_id, st.session_state.user_email = asyncio.run(
                         get_user_info(st.session_state.client, token["access_token"])
                     )
+                    logout_button()
     else:
         token = st.session_state.cookies["token"]
         try:
             st.session_state.user_id, st.session_state.user_email = asyncio.run(
                 get_user_info(st.session_state.client, token)
             )
+            logout_button()
         except (BaseException,):
             st.session_state.cookies["token"] = ""
             st.session_state.cookies.save()
