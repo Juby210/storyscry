@@ -30,22 +30,39 @@ async def revoke_token(client, token):
 
 def login_button():
     auth_url = asyncio.run(write_authorization_url(st.session_state.client))
-    st.markdown(f'[Continue with Google]({auth_url})')
+    st.columns(3)[1].write(f'<br><a href="{auth_url}" target="_blank" class="loginButton">Continue with Google</a>'
+                           '''<style>.loginButton {
+    text-decoration: none;
+    color: rgb(49, 51, 63) !important;
+    display: inline-flex;
+    font-weight: 400;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.25rem;
+    user-select: none;
+    background-color: white;
+    border: 1px solid rgba(49, 51, 63, 0.2);
+}
+.loginButton\\:hover {
+    border-color: rgb(255, 75, 75);
+    color: rgb(255, 75, 75) !important;
+    text-decoration: none;
+}</style>''', unsafe_allow_html=True)
 
 
 def logout_button():
-    if st.button("Logout"):
+    if st.sidebar.button("Logout"):
         asyncio.run(revoke_token(st.session_state.client, st.session_state.cookies["token"]))
         del st.session_state["user_email"]
         del st.session_state["user_id"]
-        del st.session_state.cookies["token"]
+        st.session_state.cookies["token"] = ""
+        st.session_state.cookies.save()
         st.experimental_rerun()
 
 
 def login():
     st.session_state.client = GoogleOAuth2(os.getenv("GOOGLE_CLIENT_ID"), os.getenv("GOOGLE_CLIENT_SECRET"))
 
-    if "token" not in st.session_state.cookies:
+    if "token" not in st.session_state.cookies or st.session_state.cookies["token"] == "":
         try:
             code = st.experimental_get_query_params()["code"]
         except (BaseException,):
@@ -64,13 +81,13 @@ def login():
                     st.session_state.user_id, st.session_state.user_email = asyncio.run(
                         get_user_info(st.session_state.client, token["access_token"])
                     )
-                    logout_button()
     else:
         token = st.session_state.cookies["token"]
         try:
             st.session_state.user_id, st.session_state.user_email = asyncio.run(
                 get_user_info(st.session_state.client, token)
             )
-            logout_button()
         except (BaseException,):
+            st.session_state.cookies["token"] = ""
+            st.session_state.cookies.save()
             login_button()
