@@ -66,10 +66,17 @@ else:
     acts = re.findall(r'\d?\d\. .+:', st.session_state.output)
     for i in range(len(acts)):
         with st.container():
-            col1, col2 = st.columns(2)
+            col1, col2, col3 = st.columns([1, 1, 2])
             act = acts[i]
-            col1.markdown("#### " + act[:-1])
+            act2 = act[:-1]
+            col1.markdown("#### " + act2)
+
+            col2.button("Regenerate", "regen " + act2, use_container_width=True)
+            col2.button("Create scenes", "create " + act2, use_container_width=True)
+
             val = st.session_state.output.split(act)[1][1:]
             if i < len(acts) - 1:
                 val = val.split(acts[i+1])[0]
-            col2.text_area(act, label_visibility="collapsed", height=150, value=val)
+            col3.text_area(act, label_visibility="collapsed", height=150, value=val)
+
+    st.columns(3)[1].download_button("Export", st.session_state.output, "export.txt", use_container_width=True)
