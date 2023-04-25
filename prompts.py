@@ -1,6 +1,7 @@
 import streamlit as st
+from streamlit_extras.switch_page_button import switch_page
 
-from acts import Structure
+from enums import Structure
 
 
 def prompts():
@@ -10,19 +11,19 @@ def prompts():
         empty = st.empty()
         c = empty.container()
         c.header("What story do you want to create?")
-        st.session_state.inp1 = c.text_area(
+        st.session_state.theme = c.text_area(
             "(describe your theme e. g. the storey about: love, money, grief, dreams etc.)",
-            st.session_state.inp1 if "inp1" in st.session_state else ""
+            st.session_state.theme if "theme" in st.session_state else ""
         )
         c.header("Who is your main characters and what is his/her goal?")
-        st.session_state.inp2 = c.text_area(
+        st.session_state.character = c.text_area(
             "(describe your Protagonist character and his purpose, what he wants, what he needs)",
-            st.session_state.inp2 if "inp2" in st.session_state else ""
+            st.session_state.character if "character" in st.session_state else ""
         )
         c.header("Who is his/her antagonist? (optional)")
-        st.session_state.inp3 = c.text_area(
+        st.session_state.antagonist = c.text_area(
             "(describe your main character's Antagonist and his goal, why he wants to stop our hero?)",
-            st.session_state.inp3 if "inp3" in st.session_state else ""
+            st.session_state.antagonist if "antagonist" in st.session_state else ""
         )
         if c.button("Select structure"):
             empty.empty()
@@ -56,4 +57,4 @@ def select_structure():
 
 def goto_acts(selected):
     st.session_state.structure = selected
-    st.experimental_rerun()
+    switch_page("Acts")

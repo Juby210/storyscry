@@ -6,3 +6,4 @@ python-dotenv
 asyncio
 httpx-oauth
 streamlit-cookies-manager
+streamlit-extras

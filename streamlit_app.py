@@ -1,32 +1,9 @@
-import os
-
-import ai21
 import streamlit as st
-from dotenv import load_dotenv
-from streamlit_cookies_manager import CookieManager
 
-from acts import acts
-from login import login
 from prompts import prompts
+from utils import init_page
 
-st.set_page_config(page_title="Story/scry AI", layout="wide")
-
-load_dotenv()
-
-st.session_state.cookies = CookieManager(prefix="ai21hackathon/")
-if not st.session_state.cookies.ready():
-    st.stop()
-
-API_KEY = os.getenv("AI21_LABS_API_KEY")
-
-ai21.api_key = API_KEY
-
-st.title("Story/scry AI")
-
-login()
+init_page()
 
 if "user_email" in st.session_state:
-    if "structure" in st.session_state:
-        acts()
-    else:
-        prompts()
+    prompts()
