@@ -38,23 +38,21 @@ def select_structure():
     col1, col2, col3 = c.columns(3)
     with col1:
         st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Square_1.svg/1200px-Square_1.svg.png")
-        if st.button("Three-act structure", use_container_width=True):
-            goto_acts(Structure.ThreeAct)
+        if st.button("Three-Act Structure", use_container_width=True):
+            st.session_state.structure = True
+            switch_page("Three-Act Structure")
     with col2:
         st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Square_1.svg/1200px-Square_1.svg.png")
         if st.button("Hero's Journey", use_container_width=True):
-            goto_acts(Structure.HeroJourney)
+            st.session_state.structure = True
+            switch_page("Heros Journey")
     with col3:
         st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Square_1.svg/1200px-Square_1.svg.png")
         if st.button("Save the cat", use_container_width=True):
-            goto_acts(Structure.SaveTheCat)
+            st.session_state.structure = True
+            switch_page("Save the cat")
     c.markdown("###")
     if c.button("Go back"):
         empty.empty()
         del st.session_state["select"]
         prompts()
-
-
-def goto_acts(selected):
-    st.session_state.structure = selected
-    switch_page("Acts")
