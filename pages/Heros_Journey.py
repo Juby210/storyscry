@@ -4,7 +4,7 @@ import ai21
 import streamlit as st
 from streamlit_extras.switch_page_button import switch_page
 
-from utils import init_page
+from utils import init_page, gen_scenes_areas
 
 init_page()
 
@@ -37,20 +37,7 @@ if "12. The Return:" not in st.session_state.output:
         )
         st.session_state.output += response.completions[0].data.text
 
-acts = re.findall(r'\d?\d\. .+:', st.session_state.output)
-for i in range(len(acts)):
-    with st.container():
-        col1, col2, col3 = st.columns([1, 1, 2])
-        act = acts[i]
-        act2 = act[:-1]
-        col1.markdown("#### " + act2)
 
-        col2.button("Regenerate", "regen " + act2, use_container_width=True)
-        col2.button("Create scenes", "create " + act2, use_container_width=True)
-
-        val = st.session_state.output.split(act)[1].strip()
-        if i < len(acts) - 1:
-            val = val.split(acts[i + 1])[0]
-        col3.text_area(act, label_visibility="collapsed", height=150, value=val)
+gen_scenes_areas(st.session_state.output, PROMPT)
 
 st.columns(3)[1].download_button("Export", st.session_state.output, "export.txt", use_container_width=True)
