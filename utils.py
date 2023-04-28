@@ -102,4 +102,4 @@ def footer(export_prefix=""):
     col2.download_button("Export", export_prefix + st.session_state.output, "export.txt", use_container_width=True)
     if col1.button("Go back"):
         del st.session_state["output"]
-        switch_page("streamlit_app")
+        switch_page("Prompts")
