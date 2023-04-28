@@ -14,12 +14,12 @@ THREE_ACT_STRUCTURE_DESCRIPTION = "A story framework with beginning (Setup), mid
                                   "(Resolution) for character development and plot growth."
 HEROS_JOURNEY_DESCRIPTION = "A 17-stage monomyth with a protagonist's transformative adventure, challenges, " \
                             "and return with wisdom."
-SAVE_THE_CAT_DESCRIPTION = "A 15-beat structure focusing on character arcs, emotional connection, and key moments for " \
-                           "compelling stories."
+SAVE_THE_CAT_DESCRIPTION = "A 15-beat structure focusing on character arcs, emotional connection, and key moments for" \
+                           " compelling stories."
 
 
 def init_page(subpage=None, desc=None, img=None):
-    st.set_page_config(page_title="Story/scry AI", layout="wide")
+    st.set_page_config(page_title="Story/scry AI", layout="wide", initial_sidebar_state="collapsed")
     # Hack, hides default navbar from the sidebar
     st.sidebar.write(
         '<style>div[data-testid="stSidebarNav"]{visibility:hidden;height:4rem}</style>', unsafe_allow_html=True)
