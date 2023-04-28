@@ -1,13 +1,10 @@
 import ai21
 import streamlit as st
-from streamlit_extras.switch_page_button import switch_page
 
-from utils import init_page, gen_scenes_areas
+import utils
 
-init_page()
-
-if "structure" not in st.session_state:
-    switch_page("streamlit_app")
+utils.init_page()
+utils.ensure_main_page_was_displayed()
 
 st.header("Save the cat")
 
@@ -26,17 +23,17 @@ if "output" not in st.session_state:
 
 st.columns(3)[1].markdown("### Act 1 - The Beginning")
 split_by_act = st.session_state.output.split("Act 2A / The Middle")
-gen_scenes_areas(split_by_act[0], PROMPT)
+utils.gen_scenes_areas(split_by_act[0], PROMPT)
 
 st.columns(3)[1].markdown("### Act 2A - The Middle (Part 1)")
 split_by_act = split_by_act[1].split("Act 2B / The Middle")
-gen_scenes_areas(split_by_act[0], PROMPT)
+utils.gen_scenes_areas(split_by_act[0], PROMPT)
 
 st.columns(3)[1].markdown("### Act 2B - The Middle (Part 2)")
 split_by_act = split_by_act[1].split("Act 3 / The End")
-gen_scenes_areas(split_by_act[0], PROMPT)
+utils.gen_scenes_areas(split_by_act[0], PROMPT)
 
 st.columns(3)[1].markdown("### Act 3 - The End")
-gen_scenes_areas(split_by_act[1], PROMPT)
+utils.gen_scenes_areas(split_by_act[1], PROMPT)
 
-st.columns(3)[1].download_button("Export", st.session_state.output, "export.txt", use_container_width=True)
+utils.export_button()

@@ -1,15 +1,10 @@
-import re
-
 import ai21
 import streamlit as st
-from streamlit_extras.switch_page_button import switch_page
 
-from utils import init_page, gen_scenes_areas
+import utils
 
-init_page()
-
-if "structure" not in st.session_state:
-    switch_page("streamlit_app")
+utils.init_page()
+utils.ensure_main_page_was_displayed()
 
 st.header("Hero's Journey")
 
@@ -26,6 +21,7 @@ if "output" not in st.session_state:
         )
         st.session_state.output = "1. The Ordinary World:\n" + response.completions[0].data.text
 
+# sometimes ai21 doesn't generate full story, if happens generate missing parts
 if "12. The Return:" not in st.session_state.output:
     with st.spinner("Generating..."):
         response = ai21.Completion.execute(
@@ -38,6 +34,5 @@ if "12. The Return:" not in st.session_state.output:
         st.session_state.output += response.completions[0].data.text
 
 
-gen_scenes_areas(st.session_state.output, PROMPT)
-
-st.columns(3)[1].download_button("Export", st.session_state.output, "export.txt", use_container_width=True)
+utils.gen_scenes_areas(st.session_state.output, PROMPT)
+utils.export_button()

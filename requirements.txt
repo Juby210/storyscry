@@ -1,5 +1,3 @@
-altair
-pandas
 streamlit
 ai21
 python-dotenv

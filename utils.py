@@ -5,12 +5,14 @@ import ai21
 import streamlit as st
 from dotenv import load_dotenv
 from streamlit_cookies_manager import CookieManager
+from streamlit_extras.switch_page_button import switch_page
 
 from login import login
 
 
 def init_page():
     st.set_page_config(page_title="Story/scry AI", layout="wide")
+    # Hack, hides default navbar from the sidebar
     st.sidebar.write(
         '<style>div[data-testid="stSidebarNav"]{visibility:hidden;height:4rem}</style>', unsafe_allow_html=True)
 
@@ -58,3 +60,13 @@ def regen_scene(prompt, scene, original):
     )
     st.session_state.output = st.session_state.output.replace(original, response.completions[0].data.text + "\n\n", 1)
     return response.completions[0].data.text.strip()
+
+
+# ensures that the user already provided data in main page prompts, if no goes back to main page
+def ensure_main_page_was_displayed():
+    if "structure" not in st.session_state:
+        switch_page("streamlit_app")
+
+
+def export_button(prefix=""):
+    st.columns(3)[1].download_button("Export", prefix + st.session_state.output, "export.txt", use_container_width=True)

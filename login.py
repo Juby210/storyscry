@@ -28,6 +28,7 @@ async def revoke_token(client, token):
     return await client.revoke_token(token)
 
 
+# Hack, streamlit doesn't allow buttons to open external sites
 def login_button():
     auth_url = asyncio.run(write_authorization_url(st.session_state.client))
     st.columns(3)[1].write(f'<br><a href="{auth_url}" target="_blank" class="loginButton">Continue with Google</a>'
@@ -60,6 +61,7 @@ def logout_button():
         st.experimental_rerun()
 
 
+# Displays login page or logout button in the sidebar
 def login():
     if "user_id" in st.session_state:
         logout_button()

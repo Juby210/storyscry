@@ -1,13 +1,10 @@
 import ai21
 import streamlit as st
-from streamlit_extras.switch_page_button import switch_page
 
-from utils import init_page, regen_scene
+import utils
 
-init_page()
-
-if "structure" not in st.session_state:
-    switch_page("streamlit_app")
+utils.init_page()
+utils.ensure_main_page_was_displayed()
 
 st.header("Three-Act Structure")
 
@@ -20,7 +17,7 @@ def act_container(act_number, val):
     text_area_cont = col2.container()
     _, c2, c3 = col2.columns(3)
     if c2.button("Regenerate", "regen " + act_number, use_container_width=True):
-        val = regen_scene(PROMPT, "Act " + act_number, val)
+        val = utils.regen_scene(PROMPT, "Act " + act_number, val)
     c3.button("Create scenes", "create " + act_number, use_container_width=True)
     text_area_cont.text_area("Act " + act_number, label_visibility="collapsed", height=200, value=val)
 
@@ -42,4 +39,4 @@ split_by_act = split_by_act[1].split("Act 3:")
 act_container("II", split_by_act[0].strip())
 act_container("III", split_by_act[1].strip())
 
-st.columns(3)[1].download_button("Export", "Act 1:\n" + st.session_state.output, "export.txt", use_container_width=True)
+utils.export_button("Act 1:\n")

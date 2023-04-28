@@ -1,8 +1,6 @@
 import streamlit as st
 from streamlit_extras.switch_page_button import switch_page
 
-from enums import Structure
-
 
 def prompts():
     if "select" in st.session_state:
