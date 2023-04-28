@@ -15,10 +15,14 @@ def prompts():
             "(describe your theme e. g. the storey about: love, money, grief, dreams etc.)",
             st.session_state.theme if "theme" in st.session_state else ""
         )
-        c.header("Who is your main characters and what is his/her goal?")
+        c.header("Who is your main characters?")
         st.session_state.character = c.text_area(
             "(describe your Protagonist character and his purpose, what he wants, what he needs)",
             st.session_state.character if "character" in st.session_state else ""
+        )
+        c.header("What is his/her goal?")
+        st.session_state.goal = c.text_area(
+            "", st.session_state.goal if "goal" in st.session_state else "", label_visibility="collapsed"
         )
         c.header("Who is his/her antagonist? (optional)")
         st.session_state.antagonist = c.text_area(

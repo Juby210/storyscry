@@ -60,8 +60,9 @@ def gen_scenes_areas(text, prompt):
                 val = val.split(scenes[i + 1])[0]
             if col2.button("Regenerate", "regen " + scene2, use_container_width=True):
                 val = regen_scene(prompt, scene2, val)
+            if col2.button("Create scenes", "create " + scene2, use_container_width=True):
+                val = create_scenes(scene2, val)
 
-            col2.button("Create scenes", "create " + scene2, use_container_width=True)
             col3.text_area(scene2, label_visibility="collapsed", height=150, value=val)
 
 
@@ -73,8 +74,22 @@ def regen_scene(prompt, scene, original):
         maxTokens=1000,
         minTokens=50,
     )
-    st.session_state.output = st.session_state.output.replace(original, response.completions[0].data.text + "\n\n", 1)
-    return response.completions[0].data.text.strip()
+    new = response.completions[0].data.text
+    st.session_state.output = st.session_state.output.replace(original, new + "\n\n", 1)
+    return new.strip()
+
+
+def create_scenes(name, original):
+    response = ai21.Completion.execute(
+        model="j2-grande-instruct",
+        prompt="Here is our story:\n\n" + st.session_state.output + "\n\nAnd now a description of the Fountain format: The Fountain format is a plain text markup language that uses specific syntax to indicate elements of a screenplay, such as scene headings, dialogue, and action. Here's an example of how you can prompt a scene in the Fountain format:\n\nINT. COFFEE SHOP - DAY\n\nJACK, a disheveled writer, sits at a table, staring at his laptop. He takes a sip of coffee and sighs.\n\nJACK\n(to himself)\nI can't do this. I'm never going to finish this screenplay.\n\nSuddenly, a beautiful woman, JILL, walks into the coffee shop. Jack's eyes light up.\n\nJILL\n(smiling)\nMind if I join you?\n\nJack nods, speechless.\n\nAs Jill sits down, Jack's laptop screen glows with inspiration. In this example, the scene heading \"INT. COFFEE SHOP - DAY\" indicates the location and time of the scene. The action lines describe Jack's behavior and thoughts, while the dialogue lines show his conversation with Jill. This scene in the fountain format was only the example of the format, don't remember the story only a format, our story is above that scene fragment.\n\n\nNow generate in the Fountain format three film scenes with dialogues, for \"" + name + "\" part:",
+        numResults=1,
+        maxTokens=1000,
+        minTokens=50,
+    )
+    new = original + response.completions[0].data.text
+    st.session_state.output = st.session_state.output.replace(original, new + "\n\n", 1)
+    return new.strip()
 
 
 # ensures that the user already provided data in main page prompts, if no goes back to main page
