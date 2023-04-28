@@ -26,7 +26,7 @@ def init_page(subpage=None, desc=None, img=None):
 
     load_dotenv()
 
-    st.session_state.cookies = CookieManager(prefix="ai21hackathon/")
+    st.session_state.cookies = CookieManager(prefix="storyscry/")
     if not st.session_state.cookies.ready():
         st.stop()
 

@@ -28,11 +28,13 @@ async def revoke_token(client, token):
     return await client.revoke_token(token)
 
 
-# Hack, streamlit doesn't allow buttons to open external sites
 def login_button():
+    st.title("Story/scry AI")
     auth_url = asyncio.run(write_authorization_url(st.session_state.client))
-    st.columns(3)[1].write(f'<br><a href="{auth_url}" target="_blank" class="loginButton">Continue with Google</a>'
-                           '''<style>.loginButton {
+
+    # Hack, streamlit doesn't allow buttons to open external sites
+    st.columns(3)[1].write(f'<br><p class="loginCenter"><a href="{auth_url}" target="_blank" class="loginButton">'
+                           '''Continue with Google</a></p><style>.loginButton {
     text-decoration: none;
     color: rgb(49, 51, 63) !important;
     display: inline-flex;
@@ -43,11 +45,15 @@ def login_button():
     background-color: white;
     border: 1px solid rgba(49, 51, 63, 0.2);
 }
+.loginCenter { margin: 0 auto; text-align: center; }
+div[data-testid=stImage] { margin:0 auto; }
 .loginButton\\:hover {
     border-color: rgb(255, 75, 75);
     color: rgb(255, 75, 75) !important;
     text-decoration: none;
 }</style>''', unsafe_allow_html=True)
+
+    st.image("static/login.jpeg")
 
 
 def logout_button():
