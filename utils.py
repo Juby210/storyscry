@@ -17,6 +17,7 @@ HEROS_JOURNEY_DESCRIPTION = "A 17-stage monomyth with a protagonist's transforma
 SAVE_THE_CAT_DESCRIPTION = "A 15-beat structure focusing on character arcs, emotional connection, and key moments for " \
                            "compelling stories."
 
+
 def init_page(subpage=None, desc=None, img=None):
     st.set_page_config(page_title="Story/scry AI", layout="wide")
     # Hack, hides default navbar from the sidebar
@@ -33,10 +34,8 @@ def init_page(subpage=None, desc=None, img=None):
     if ai21.api_key is None:
         ai21.api_key = os.getenv("AI21_LABS_API_KEY")
 
-    if subpage is None:
-        st.title("Story/scry AI")
-    else:
-        col1, col2, col3 = st.columns([2, 2, 1])
+    if subpage is not None:
+        col1, col2, col3 = st.columns([1, 2, 1])
         col1.title("Story/scry AI")
         col1.write("<style>img{border-radius:22%}</style>", unsafe_allow_html=True)
         col2.title(subpage)
@@ -98,5 +97,9 @@ def ensure_main_page_was_displayed():
         switch_page("streamlit_app")
 
 
-def export_button(prefix=""):
-    st.columns(3)[1].download_button("Export", prefix + st.session_state.output, "export.txt", use_container_width=True)
+def footer(export_prefix=""):
+    col1, col2, _ = st.columns(3)
+    col2.download_button("Export", export_prefix + st.session_state.output, "export.txt", use_container_width=True)
+    if col1.button("Go back"):
+        del st.session_state["output"]
+        switch_page("streamlit_app")

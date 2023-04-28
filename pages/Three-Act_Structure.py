@@ -40,4 +40,4 @@ split_by_act = split_by_act[1].split("Act 3:")
 act_container("II", split_by_act[0].strip(), 300)
 act_container("III", split_by_act[1].strip())
 
-utils.export_button("Act 1:\n")
+utils.footer("Act 1:\n")

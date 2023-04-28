@@ -33,4 +33,4 @@ if "12. The Return:" not in st.session_state.output:
 
 
 utils.gen_scenes_areas(st.session_state.output, PROMPT)
-utils.export_button()
+utils.footer()

@@ -34,4 +34,4 @@ utils.gen_scenes_areas(split_by_act[0], PROMPT)
 st.columns(3)[1].markdown("### Act 3 - The End")
 utils.gen_scenes_areas(split_by_act[1], PROMPT)
 
-utils.export_button()
+utils.footer()
