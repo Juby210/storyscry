@@ -1,6 +1,8 @@
 import streamlit as st
 from streamlit_extras.switch_page_button import switch_page
 
+import utils
+
 
 def prompts():
     if "select" in st.session_state:
@@ -35,21 +37,24 @@ def select_structure():
     c.header("Choose your story structure to create your story by AI")
     col1, col2, col3 = c.columns(3)
     with col1:
-        st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Square_1.svg/1200px-Square_1.svg.png")
+        st.image("static/three-act.jpeg")
         if st.button("Three-Act Structure", use_container_width=True):
             st.session_state.structure = True
             switch_page("Three-Act Structure")
+        st.write(utils.THREE_ACT_STRUCTURE_DESCRIPTION)
     with col2:
-        st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Square_1.svg/1200px-Square_1.svg.png")
+        st.image("static/heros-journey.jpeg")
         if st.button("Hero's Journey", use_container_width=True):
             st.session_state.structure = True
             switch_page("Heros Journey")
+        st.write(utils.HEROS_JOURNEY_DESCRIPTION)
     with col3:
-        st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Square_1.svg/1200px-Square_1.svg.png")
+        st.image("static/save-the-cat.jpeg")
         if st.button("Save the cat", use_container_width=True):
             st.session_state.structure = True
             switch_page("Save the cat")
-    c.markdown("###")
+        st.write(utils.SAVE_THE_CAT_DESCRIPTION)
+    c.write("<style>img{border-radius:22%}</style>", unsafe_allow_html=True)
     if c.button("Go back"):
         empty.empty()
         del st.session_state["select"]
